@@ -1,22 +1,17 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: debian:stretch
-    steps:
-      - checkout
-      - run:
-          name: Greeting
-          command: echo Hello, world.
-      - run:
-          name: Print the Current Time
-          command: date
+  deploy:
+  - image: circleci/python:2.7
+  working_directory: /Users/wlovely/sampleci/sampleci
+  steps:
+    - checkout
+    - run:
+      name: install awscli
+      command: sudo pip install awscli
+    - run:
+      name: remove .git and .circleci
+      command: rm -rf .git && rm -rf .gitignore && rm -rf .circleci
+    - run:
+      name: deploy to S3
+      command: aws s3 sync . s3://circlecitest --region us-east-1 --acl public-read
 
-dependencies:
-    override:
-        - sudo pip install awscli
-deployment:
-  prod:
-    branch: master
-    commands:
-      - aws s3 sync /Users/wlovely/sampleci/sampleci  s3://circlecitest --delete
