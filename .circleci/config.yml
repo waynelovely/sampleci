@@ -3,7 +3,7 @@ jobs:
   deploy:
     docker:
       - image: circleci/python:2.7
-    working_directory: /Users/wlovely/sampleci/sampleci
+    working_directory: ~/sampleci
     steps:
       - checkout
       - run:
