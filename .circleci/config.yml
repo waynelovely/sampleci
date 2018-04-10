@@ -1,17 +1,25 @@
 version: 2
 jobs:
   deploy:
-  - image: circleci/python:2.7
-  working_directory: /Users/wlovely/sampleci/sampleci
-  steps:
-    - checkout
-    - run:
-      name: install awscli
-      command: sudo pip install awscli
-    - run:
-      name: remove .git and .circleci
-      command: rm -rf .git && rm -rf .gitignore && rm -rf .circleci
-    - run:
-      name: deploy to S3
-      command: aws s3 sync . s3://circlecitest --region us-east-1 --acl public-read
-
+    docker:
+      - image: circleci/python:2.7
+    working_directory: /Users/wlovely/sampleci/sampleci
+    steps:
+      - checkout
+      - run:
+          name: install awscli
+          command: sudo pip install awscli
+      - run:
+          name: remove .git and .circleci
+          command: rm -rf .git && rm -rf .gitignore && rm -rf .circleci
+      - run:
+          name: deploy to S3
+          command: aws s3 sync . s3://circlecitest --region us-east-1 --acl public-read
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master
