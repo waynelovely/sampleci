@@ -12,3 +12,11 @@ jobs:
           name: Print the Current Time
           command: date
 
+dependencies:
+    override:
+        - sudo pip install awscli
+deployment:
+  prod:
+    branch: master
+    commands:
+      - aws s3 sync /Users/wlovely/sampleci/sampleci  s3://circlecitest --delete
